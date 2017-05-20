@@ -7,38 +7,38 @@ var monthsUntilEvicted;
 
 function loan() {
   var account = {
-    borrowed : 550000,
-    balance : 286000,
+    borrowed: 550000,
+    balance: 286000,
     monthlyPayment : 1700,
-    defaulted : 0,
-    defaultsToForeclose : 5,
-    forclosed : false
+    defaulted: 0,
+    defaultsToForeclose: 5,
+    forclosed: false
   };
 
   function missPayment() {
     account.defaulted++;
-    if (account.defaulted >= account.defaultsToForeclose) {
+    if(account.defaulted >= account.defaultsToForeclose) {
       account.forclosed = true;
     }
   }
 
   return {
-    getBalance : function() {
+    getBalance: function() {
       return account.balance;
     },
 
-    receivePayment : function(amount) {
-      if (amount < account.monthlyPayment) {
+    receivePayment: function(amount) {
+      if(amount < account.monthlyPayment) {
         missPayment();
       }
       account.balance -= amount;
     },
 
-    getMonthlyPayment : function() {
+    getMonthlyPayment: function() {
       return account.monthlyPayment;
     },
 
-    isForeclosed : function() {
+    isForeclosed: function() {
       return account.forclosed;
     }
   };
@@ -46,18 +46,18 @@ function loan() {
 
 function borrower(loan) {
   var account = {
-    monthlyIncome : 1350,
-    funds : 2800,
-    loan : loan
+    monthlyIncome: 1350,
+    funds: 2800,
+    loan: loan
   };
 
   return {
-    getFunds : function() {
+    getFunds: function() {
       return account.funds;
     },
 
-    makePayment : function() {
-      if (account.funds > loan.getMonthlyPayment()) {
+    makePayment: function() {
+      if(account.funds > loan.getMonthlyPayment()) {
         account.funds -= loan.getMonthlyPayment();
         loan.receivePayment(loan.getMonthlyPayment());
       } else {
@@ -66,7 +66,7 @@ function borrower(loan) {
       }
     },
 
-    payDay : function() {
+    payDay: function() {
       return account.funds += account.monthlyIncome;
     }
   };
@@ -75,10 +75,13 @@ function borrower(loan) {
   stevesLoan = loan();
   steve = borrower(stevesLoan);
 
-while (stevesLoan.isForeclosed() === false) {
+while(stevesLoan.isForeclosed() === false) {
   steve.payDay();
   steve.makePayment();
   month++;
+  if(stevesLoan.getBalance() === 0){
+    "Paid Off";
+  }
 }
 
 monthsUntilEvicted = month;
